@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        text-align: center;
+      }
+      .bar {
+        font-size: 24px;
+        line-height: 2;
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>⏳ Solving...</h3>
+    <p id="etaText">Estimated time: ~...</p>
+    <div class="bar" id="bar">⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</div>
+    <p id="percent">0%</p>
+
+    <script>
+      const total = Number(new URLSearchParams(location.search).get("seconds") || 10);
+      let current = 0;
+      const bar = document.getElementById("bar");
+      const percent = document.getElementById("percent");
+      document.getElementById("etaText").innerText = `Estimated time: ~${total} seconds`;
+
+      const interval = setInterval(() => {
+        current++;
+        const filled = "🟩".repeat(current);
+        const empty = "⬛".repeat(10 - current);
+        bar.textContent = filled + empty;
+        percent.textContent = Math.round((current / 10) * 100) + "%";
+
+        if (current >= 10) {
+          clearInterval(interval);
+          setTimeout(() => google.script.host.close(), 1000);
+        }
+      }, total * 100);
+    </script>
+  </body>
+</html>
